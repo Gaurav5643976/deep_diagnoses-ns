@@ -1,0 +1,10 @@
+{% extends 'deep_diagnose/base.html' %}
+{% block body %}
+<form method="get" action="{% url 'deep_diagnose:result' %}">
+city
+    <input type="text" name="city">
+    state
+    <input type="text" name="state">
+    <button type="submit">Find</button>
+</form>
+{% endblock %}

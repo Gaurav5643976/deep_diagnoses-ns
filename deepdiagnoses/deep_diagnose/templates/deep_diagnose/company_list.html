@@ -1,0 +1,15 @@
+{% extends 'deep_diagnose/base.html' %}
+{% block body %}
+<ul>
+    {% for company in filter.qs %}
+    <img src="{{company.logo.url }}" width="25%" height="45%">
+    <br>
+    <li><a href="{% url 'deep_diagnose:company_detail' company.id %}">{{company.company_name}}></a><br>
+        {{ company.address_line1 }}
+        <br>
+        {{ company.city }} {{ company.state }}
+        <br><br>
+
+        {% endfor %}
+</ul>
+{% endblock %}
