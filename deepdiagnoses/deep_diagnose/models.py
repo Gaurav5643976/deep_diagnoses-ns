@@ -38,4 +38,17 @@ class CompanyTests(models.Model):
 
     class Meta:
         verbose_name_plural = 'CompanyTests'
+
+
+class OrderInfo(models.Model):
+    user_name = models.CharField(max_length=125)
+    email_id = models.EmailField()
+    age = models.IntegerField()
+    address_line_1 = models.CharField(max_length=125)
+    city = models.CharField(max_length=125)
+    state = models.CharField(max_length=125)
+    zip_code = models.IntegerField()
+    phone_no = models.IntegerField()
+    suitable_date = models.DateField()
+    suitable_time = models.TimeField()
         

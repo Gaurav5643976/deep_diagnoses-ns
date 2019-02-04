@@ -1,9 +1,40 @@
+
 from .filters import CompanyFilter
 from django.views import generic
-from .models import CompanyDetail, Tests, CompanyTests
-from django.shortcuts import render
-from django.http import HttpResponse
+from .models import CompanyDetail, Tests, CompanyTests, OrderInfo
+from django.shortcuts import render, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from . forms import UserRegistrationForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django import forms
 
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            userObj = form.cleaned_data
+            username = userObj['username']
+            email = userObj['email']
+            password = userObj['password']
+            if not (User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()):
+                User.objects.create_user(username, email, password)
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                raise forms.ValidationError('Looks like a username with that email or password already exists')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'deep_diagnose/register.html', {'form': form})
+
+
+# for finding companies in a particular area
+def home(request):
+    return render(request, 'deep_diagnose/user_location.html')
 
 # for finding companies in a particular area
 def home(request):
@@ -74,6 +105,22 @@ def show_results(request, abc):
     }
     return render(request, 'deep_diagnose/base.html', context)
 
+
+@login_required
+def profile(request):
+    return render(request, 'deep_diagnose/profile.html')
+
+
+class OrderNow(CreateView):
+    model = OrderInfo
+    template_name = 'deep_diagnose/ordernow.html'
+    fields = ['user_name', 'email_id','age','address_line_1','city','state','zip_code','phone_no',
+              'suitable_date','suitable_time']
+    success_url = reverse_lazy('deep_diagnose:find')
+
+
+def thankyou(request):
+    return render(request, 'deep_Diagnose/thankyou.html')
 
 
 

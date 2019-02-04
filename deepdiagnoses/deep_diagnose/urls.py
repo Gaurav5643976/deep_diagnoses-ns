@@ -5,6 +5,7 @@ from . import views
 app_name = 'deep_diagnose'
 
 urlpatterns = [
+    url(r'^register/', views.register, name='register'),
     # /home/
     # for finding nearby companies
     url(r'^home/$', views.home, name='find'),
@@ -33,6 +34,12 @@ urlpatterns = [
     url(r'^response/$', views.put_list, name='response'),
 
     path('response1/<str:abc>', views.show_results),
+
+    path('profile/', views.profile, name='profile'),
+
+    path('ordernow/', views.OrderNow.as_view(), name='ordernow'),
+
+    path('thankyou/', views.thankyou, name='thankyou'),
 
 
  ]
